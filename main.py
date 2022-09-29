@@ -70,11 +70,13 @@ class GUI:
 
     # 出口
     def setExit(self):
-        for (x, y) in myMap.Exit:
-            sx, sy = x - 1, y - 1
-            ex, ey = x + 1, y + 1
-            [sx, sy, ex, ey] = map(lambda x: x * GUI.Pic_Ratio, [sx, sy, ex, ey])
-            self.canvas.create_rectangle(sx, sy, ex, ey, fill="green", outline="green")
+        print(myMap.Exits)
+        for num in range(len(myMap.Exits)):
+            for (x, y) in myMap.Exits[num]:
+                sx, sy = x - 1, y - 1
+                ex, ey = x + 1, y + 1
+                [sx, sy, ex, ey] = map(lambda x: x * GUI.Pic_Ratio, [sx, sy, ex, ey])
+                self.canvas.create_rectangle(sx, sy, ex, ey, fill="green", outline="green")
 
     def Update_People(self, People_List):
         for p in People_List:

@@ -82,10 +82,13 @@ class Map:
     def __init__(self, L, W, E, B):
         self.Length = L
         self.Width = W
-        self.Exit = E
+        self.Exits = E
         self.Barrier = B
         self.barrier_list = []
-
+        self.Exit = list()
+        for num in range(len(self.Exits)):
+            for (x,y) in Exits[num]:
+                self.Exit.append((x,y))
         # 0~L+1
         # 0~W+1
         # 势能
@@ -109,15 +112,16 @@ class Map:
                     self.barrier_list.append((i, j))
 
         # 出口
-        for (ex, ey) in self.Exit:
-            self.space[ex][ey] = 1
-            if ex == self.Length:
-                self.space[ex + 1][ey] = 1
-            if ey == self.Width:
-                self.space[ex][ey + 1] = 1
-            # #print("%d %d"%(ex, ey))
-            if (ex, ey) in self.barrier_list:
-                self.barrier_list.remove((ex, ey))
+        for exit in self.Exits:
+            for (ex, ey) in exit:
+                self.space[ex][ey] = 1
+                if ex == self.Length:
+                    self.space[ex + 1][ey] = 1
+                if ey == self.Width:
+                    self.space[ex][ey + 1] = 1
+                # #print("%d %d"%(ex, ey))
+                if (ex, ey) in self.barrier_list:
+                    self.barrier_list.remove((ex, ey))
 
         # #print(self.barrier_list)
 
@@ -176,14 +180,15 @@ class Map:
                 minDis[i][j] = float("inf")
 
         # #print(minDis)
-        for (sx, sy) in self.Exit:
-            # print(sx, sy)
-            tmp = self.BFS(sx, sy)
-            # self.#print(tmp)
-            # print("----")
-            for i in range(self.Length + Outer_Size * 2):
-                for j in range(self.Width + Outer_Size * 2):
-                    minDis[i][j] = min(minDis[i][j], tmp[i][j])
+        for num in range(len(self.Exits)):
+            for (sx, sy) in Exits[num]:
+                # print(sx, sy)
+                tmp = self.BFS(sx, sy)
+                # self.#print(tmp)
+                # print("----")
+                for i in range(self.Length + Outer_Size * 2):
+                    for j in range(self.Width + Outer_Size * 2):
+                        minDis[i][j] = min(minDis[i][j], tmp[i][j])
 
         self.space = minDis
         print(minDis.shape)
@@ -288,6 +293,9 @@ Width = 75
 # 点集
 Exits = list()
 Exit = Init_Exit(P1=(100, 27), P2=(100, 29))
+Exits.append(Init_Exit(P1=(100, 27), P2=(100, 29)))
+Exits.append(Init_Exit(P1=(80, 0), P2=(82, 0)))
+
 
 # Exit.extend(Init_Exit(P1=(0, 25), P2=(0, 35)))
 
@@ -350,4 +358,4 @@ Barrier.append(Init_Barrier1(A=(234, 22), B=(248, 34), C=1))
 Barrier.append(Init_Barrier1(A=(260, 22), B=(278, 57), C=2))
 
 # 第一种情况
-myMap = Map(L=Length, W=Width, E=Exit, B=Barrier)
+myMap = Map(L=Length, W=Width, E=Exits, B=Barrier)
