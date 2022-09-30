@@ -31,21 +31,40 @@ class GUI:
         self.label_evac = tk.Label(self.root, text="已疏散: 0", font='Arial -37 bold')
         self.entry_peoplenumber = tk.Entry(self.root, font=(None, 35), width=6)
         self.button_start = tk.Button(self.root, text="开始", width=5, font='Arial -30 bold',
-                                      command=lambda: Cellular_Automata(int(self.entry_peoplenumber.get())))
+                                      command=lambda: self.Cellular_Automata(int(self.entry_peoplenumber.get())))
         self.button_createpeople = tk.Button(self.root, text="生成", width=5, font='Arial -30 bold',
-                                      command=lambda: create_people(int(self.entry_peoplenumber.get())))
-
+                                             command=lambda: self.create_people(int(self.entry_peoplenumber.get())))
+        self.button_bindmouse = tk.Button(self.root, text="绑定鼠标", width=7, font='Arial -30 bold',
+                                          command=lambda: self.bind())
+        self.button_unbindmouse = tk.Button(self.root, text="解绑鼠标", width=7, font='Arial -30 bold',
+                                            command=lambda: self.unbind())
 
         self.label_time.place(x=40, y=760)
         self.label_evac.place(x=40, y=810)
         self.button_start.place(x=925, y=820)
-        self.button_createpeople.place(x=925,y=760)
+        self.button_createpeople.place(x=925, y=760)
+        self.button_bindmouse.place(x=500, y=830)
+        self.button_unbindmouse.place(x=650, y=830)
         self.label_text.place(x=580, y=770)
         self.entry_peoplenumber.place(x=760, y=770)
 
-
         self.setBarrier()
         self.setExit()
+
+    # 查询鼠标位置
+    def bind(self):
+        print("sss")
+        self.canvas.bind("<Button-1>", self.paint)
+
+    def unbind(self):
+        print("eee")
+        self.canvas.unbind("<Button-1>")
+
+    def addpeoplebymouse(self):
+        print("none")
+
+    def paint(self, event):
+        print("x:", event.x, "y:", event.y)
 
     # 障碍
     def setBarrier(self):
@@ -100,44 +119,43 @@ class GUI:
             [x1, y1, x2, y2] = map(lambda x: x * GUI.Pic_Ratio, [x1, y1, x2, y2])
             self.canvas.create_oval(x1, y1, x2, y2, fill="black", outline="black", tag=p.name())
 
+    def Cellular_Automata(self, Total_People):
+        # UI = GUI()
 
-def Cellular_Automata(Total_People):
-    # UI = GUI()
+        # Total_People = 200
+        # P = People(Total_People, myMap)
+        # UI.Show_People(P.list)
+        P = self.People
 
-    # Total_People = 200
-    P = People(Total_People, myMap)
-    UI.Show_People(P.list)
+        Time_Start = time.time()
+        Eva_Number = 0
+        while Eva_Number < Total_People:
+            Eva_Number = P.run()
 
-    Time_Start = time.time()
-    Eva_Number = 0
-    while Eva_Number < Total_People:
-        Eva_Number = P.run()
+            UI.Update_People(P.list)
 
-        UI.Update_People(P.list)
+            # time.sleep(random.uniform(0.05, 0.15))
+            time.sleep(0.01)
+            UI.canvas.update()
+            UI.root.update()
 
-        # time.sleep(random.uniform(0.05, 0.15))
-        time.sleep(0.01)
-        UI.canvas.update()
-        UI.root.update()
+            Time_Pass = time.time() - Time_Start
+            UI.label_time['text'] = "Time = " + "%.2f" % Time_Pass + "s"
+            UI.label_evac['text'] = "Evacution People: " + str(Eva_Number)
+        # print("%.2fs" % (Time_Pass) + " 已疏散人数:" +str(Eva_Number))
 
         Time_Pass = time.time() - Time_Start
         UI.label_time['text'] = "Time = " + "%.2f" % Time_Pass + "s"
         UI.label_evac['text'] = "Evacution People: " + str(Eva_Number)
-    # print("%.2fs" % (Time_Pass) + " 已疏散人数:" +str(Eva_Number))
 
-    Time_Pass = time.time() - Time_Start
-    UI.label_time['text'] = "Time = " + "%.2f" % Time_Pass + "s"
-    UI.label_evac['text'] = "Evacution People: " + str(Eva_Number)
+        # 热力图
+        sns.heatmap(P.thmap.T, cmap='Reds')
+        plt.axis('equal')
+        plt.show()
 
-    # 热力图
-    sns.heatmap(P.thmap.T, cmap='Reds')
-    plt.axis('equal')
-    plt.show()
-
-
-def create_people(Total_People):
-    P = People(Total_People, myMap)
-    UI.Show_People(P.list)
+    def create_people(self, Total_People):
+        self.People = People(Total_People, myMap)
+        UI.Update_People(self.People.list)
 
 
 # UI.root.mainloop()

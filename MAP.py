@@ -87,8 +87,8 @@ class Map:
         self.barrier_list = []
         self.Exit = list()
         for num in range(len(self.Exits)):
-            for (x,y) in Exits[num]:
-                self.Exit.append((x,y))
+            for (x, y) in Exits[num]:
+                self.Exit.append((x, y))
         # 0~L+1
         # 0~W+1
         # 势能
@@ -295,7 +295,6 @@ Exits = list()
 Exit = Init_Exit(P1=(100, 27), P2=(100, 29))
 Exits.append(Init_Exit(P1=(100, 27), P2=(100, 29)))
 Exits.append(Init_Exit(P1=(75, 0), P2=(77, 0)))
-
 
 # Exit.extend(Init_Exit(P1=(0, 25), P2=(0, 35)))
 
