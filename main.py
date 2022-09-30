@@ -18,7 +18,7 @@ class GUI:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("疏散模拟")
-        self.root.geometry("1100x900")
+        self.root.geometry("1100x950")
         self.root.resizable(width=True, height=True)
 
         width = myMap.Length * GUI.Pic_Ratio
@@ -27,17 +27,22 @@ class GUI:
         self.canvas.pack()
 
         self.label_text = tk.Label(self.root, text="疏散人数:", font='Arial -37 bold')
-        self.label_time = tk.Label(self.root, text="Time = 0.00s", font='Arial -37 bold')
-        self.label_evac = tk.Label(self.root, text="Evacution People: 0", font='Arial -37 bold')
+        self.label_time = tk.Label(self.root, text="耗时 = 0.00s", font='Arial -37 bold')
+        self.label_evac = tk.Label(self.root, text="已疏散: 0", font='Arial -37 bold')
         self.entry_peoplenumber = tk.Entry(self.root, font=(None, 35), width=6)
-
-        self.button_start = tk.Button(self.root, text="开始", width=5, font='Arial -37 bold',
+        self.button_start = tk.Button(self.root, text="开始", width=5, font='Arial -30 bold',
                                       command=lambda: Cellular_Automata(int(self.entry_peoplenumber.get())))
+        self.button_createpeople = tk.Button(self.root, text="生成", width=5, font='Arial -30 bold',
+                                      command=lambda: create_people(int(self.entry_peoplenumber.get())))
+
+
         self.label_time.place(x=40, y=760)
         self.label_evac.place(x=40, y=810)
-        self.button_start.place(x=925, y=760)
+        self.button_start.place(x=925, y=820)
+        self.button_createpeople.place(x=925,y=760)
         self.label_text.place(x=580, y=770)
         self.entry_peoplenumber.place(x=760, y=770)
+
 
         self.setBarrier()
         self.setExit()
@@ -101,7 +106,6 @@ def Cellular_Automata(Total_People):
 
     # Total_People = 200
     P = People(Total_People, myMap)
-
     UI.Show_People(P.list)
 
     Time_Start = time.time()
@@ -129,6 +133,11 @@ def Cellular_Automata(Total_People):
     sns.heatmap(P.thmap.T, cmap='Reds')
     plt.axis('equal')
     plt.show()
+
+
+def create_people(Total_People):
+    P = People(Total_People, myMap)
+    UI.Show_People(P.list)
 
 
 # UI.root.mainloop()

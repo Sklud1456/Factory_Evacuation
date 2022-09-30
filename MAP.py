@@ -294,7 +294,7 @@ Width = 75
 Exits = list()
 Exit = Init_Exit(P1=(100, 27), P2=(100, 29))
 Exits.append(Init_Exit(P1=(100, 27), P2=(100, 29)))
-Exits.append(Init_Exit(P1=(80, 0), P2=(82, 0)))
+Exits.append(Init_Exit(P1=(75, 0), P2=(77, 0)))
 
 
 # Exit.extend(Init_Exit(P1=(0, 25), P2=(0, 35)))
