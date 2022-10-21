@@ -1,6 +1,8 @@
 import numpy as np
 from queue import Queue
 import random
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 Direction = {
     "RIGHT": 0, "UP": 1, "LEFT": 2, "DOWN": 3, "NONE": -1
@@ -175,6 +177,7 @@ class Map:
         x2, y2 = int(P2[0]), int(P2[1])
         return self.space[x1][y1] - self.space[x2][y2]
 
+    # 确立势能地图
     def Init_Potential(self):
         minDis = np.zeros((self.Length + Outer_Size * 2, self.Width + Outer_Size * 2))
         for i in range(self.Length + Outer_Size * 2):
@@ -193,12 +196,33 @@ class Map:
                         minDis[i][j] = min(minDis[i][j], tmp[i][j])
 
         self.space = minDis
-        print(minDis.shape)
+
+
+
+
+
+
+        print(minDis)
+        print(minDis.max())
+        seeit=minDis.copy()
+
+        # Barrier.append(Init_Barrier1(A=(65, 33), B=(85, 53), C=1))
+        print(seeit.shape)
+        for i in range(seeit.shape[0]):
+            for j in range(seeit.shape[1]):
+                if seeit[i][j]==float("inf"):
+                    seeit[i][j]=200
+        for i in range(int((33 - 6)/3),int((65 - 6)/3)):
+            for j in range(75-int((85 + 6 )/3),75- int((53 + 6)/3)):
+                seeit[i][j] += 50
+        sns.heatmap(seeit.T, cmap='Reds',vmax=seeit.max(),vmin=seeit.min())
+        plt.axis('equal')
+        plt.show()
 
     # return minDis
     # #print(minDis)
 
-    # 确立势能地图
+
     def BFS(self, x, y):
         if not self.Check_Valid(x, y):
             return
@@ -223,7 +247,6 @@ class Map:
                 if self.Check_Valid(nx, ny) and tmpDis[nx][ny] == 0:
                     queue.put((nx, ny))
                     tmpDis[nx][ny] = dis + (1.0 if i < 4 else 1.4)
-
         return tmpDis
 
     def Random_Valid_Point(self):
