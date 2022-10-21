@@ -105,6 +105,8 @@ class Map:
             self.barrier_list.append((i, 0))
             self.barrier_list.append((i, W + 1))
 
+        #设立障碍
+
         for (A, B, C) in self.Barrier:
             for i in range(A[0], B[0] + 1):
                 for j in range(A[1], B[1] + 1):
@@ -298,7 +300,7 @@ Exits.append(Init_Exit(P1=(75, 0), P2=(77, 0)))
 
 # Exit.extend(Init_Exit(P1=(0, 25), P2=(0, 35)))
 
-# 甲乙丙丁戊危险划分
+# 甲乙丙丁戊危险划分 1-5
 # 障碍 矩形区域
 Barrier = list()
 # 事故应急池，污水收集池
