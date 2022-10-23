@@ -13,6 +13,7 @@ class Person:
         self.pos = (pos_x, pos_y)
         self.speed = Person.Normal_Speed
         self.savety = False
+        self.membertype = "normal"
 
     def name(self):
         return "ID_" + str(self.id)
@@ -101,7 +102,7 @@ class People:
             if p.savety:
                 cnt = cnt + 1
                 continue
-            speed = 1.2  # self.getSpeed(p)
+            speed = 1  # self.getSpeed(p)
             # speed = p.speed #random.uniform(p.speed-0.1, p.speed+0.1)
             # (now_x, now_y) = p.pos
             choice = []
@@ -111,14 +112,16 @@ class People:
             Dire = [0, 1, 2, 3, 4, 5, 6, 7]
             random.shuffle(Dire)
 
-            # 遍历方向，方便之后选择
-            for dire in Dire:
-                dx, dy = MoveTO[dire][0] * speed, MoveTO[dire][1] * speed
-                (next_x, next_y) = p.pos[0] + dx, p.pos[1] + dy
-                # 下一步能走
-                if self.map.Check_Valid(next_x, next_y) and self.getMapValue(self.rmap, next_x, next_y) <= 1:
-                    choice.append(dire)
-                    weigh.append(self.map.getDeltaP(p.pos, (next_x, next_y)))
+            while len(choice) == 0:
+                # 遍历方向，方便之后选择
+                for dire in Dire:
+                    dx, dy = MoveTO[dire][0] * speed, MoveTO[dire][1] * speed
+                    (next_x, next_y) = p.pos[0] + dx, p.pos[1] + dy
+                    # 下一步能走
+                    if self.map.Check_Valid(next_x, next_y) and self.getMapValue(self.rmap, next_x, next_y) <= 1:
+                        choice.append(dire)
+                        weigh.append(self.map.getDeltaP(p.pos, (next_x, next_y)))
+                speed -= 0.1
 
             # 在可行的选择列表中选择下降最快的
             if len(choice) > 0:

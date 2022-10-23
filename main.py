@@ -15,7 +15,7 @@ class GUI:
     # GUI
     # 图像比例
     Pic_Ratio = 10
-    People=People(0, myMap)
+    People = People(0, myMap)
 
     def __init__(self):
         self.root = tk.Tk()
@@ -69,16 +69,15 @@ class GUI:
         pos_x = event.x
         pos_y = event.y
         # print("x:", event.x, "y:", event.y)
-        pos_x = pos_x/self.Pic_Ratio
-        pos_y = pos_y/self.Pic_Ratio
+        pos_x = pos_x / self.Pic_Ratio
+        pos_y = pos_y / self.Pic_Ratio
         self.People.tot += 1
         self.entry_peoplenumber.delete(0, "end")
-        self.entry_peoplenumber.insert(0,str(self.People.tot))
+        self.entry_peoplenumber.insert(0, str(self.People.tot))
         self.People.list.append(Person(self.People.tot, pos_x, pos_y))
         self.People.addMapValue(self.People.rmap, pos_x, pos_y)
         self.People.addMapValue(self.People.thmap, pos_x, pos_y)
         self.Update_People(self.People.list)
-
 
     # 障碍
     def setBarrier(self):

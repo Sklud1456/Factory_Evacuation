@@ -67,8 +67,8 @@ def Init_Barrier1(A, B, C):
         return ((x1, y2), (x2, y1), C)
 
 
-# 
-# 外墙宽度 
+#
+# 外墙宽度
 # Size
 Outer_Size = 1
 
@@ -107,7 +107,7 @@ class Map:
             self.barrier_list.append((i, 0))
             self.barrier_list.append((i, W + 1))
 
-        #设立障碍
+        # 设立障碍
 
         for (A, B, C) in self.Barrier:
             for i in range(A[0], B[0] + 1):
@@ -197,31 +197,40 @@ class Map:
 
         self.space = minDis
 
-
-
-
-
-
-        print(minDis)
-        print(minDis.max())
-        seeit=minDis.copy()
-
+        seeit = minDis.copy()
         # Barrier.append(Init_Barrier1(A=(65, 33), B=(85, 53), C=1))
         print(seeit.shape)
+        for (A, B, C) in self.Barrier:
+            if C <= 2:
+                for i in range(A[0] - 1, B[0] + 2):
+                    for j in range(A[1] - 1, B[1] + 2):
+                        seeit[i][j] += 50
+        minDis = seeit.copy()
         for i in range(seeit.shape[0]):
             for j in range(seeit.shape[1]):
-                if seeit[i][j]==float("inf"):
-                    seeit[i][j]=200
-        for i in range(int((33 - 6)/3),int((65 - 6)/3)):
-            for j in range(75-int((85 + 6 )/3),75- int((53 + 6)/3)):
-                seeit[i][j] += 50
-        sns.heatmap(seeit.T, cmap='Reds',vmax=seeit.max(),vmin=seeit.min())
+                if seeit[i][j] == float("inf"):
+                    seeit[i][j] = 200
+
+        sns.heatmap(seeit.T, cmap='Reds', vmax=seeit.max(), vmin=seeit.min())
         plt.axis('equal')
         plt.show()
 
+        self.space = minDis
+        # 查看热力地图
+        # toprint=minDis.copy()
+        # toprint=toprint.T
+        # for i in range(50,76):
+        #     for j in range(70,99):
+        #         if toprint[i][j]==float("inf"):
+        #             print(toprint[i][j],end="   ")
+        #         elif toprint[i][j]>=100:
+        #             print(round(toprint[i][j],1),end=" ")
+        #         else:
+        #             print(round(toprint[i][j],1),end="  ")
+        #     print("")
+
     # return minDis
     # #print(minDis)
-
 
     def BFS(self, x, y):
         if not self.Check_Valid(x, y):
@@ -277,44 +286,11 @@ def Init_Map():
     return Map(L=Length, W=Width, E=Exit, B=Barrier)
 
 
-# # 房间长宽
-# Length = 30
-# Width = 20
-
-# # 出口 
-# # 点集
-# Exit = Init_Exit(P1=(30, 4), P2=(30, 7))
-# Exit.extend(Init_Exit(P1=(30, 15), P2=(30, 18)))
-
-# # 障碍 矩形区域
-# Barrier = list()
-# Barrier.append(Init_Barrier(A=(3, 5), B=(10, 12)))
-# Barrier.append(Init_Barrier(A=(14, 0), B=(16, 15)))
-# Barrier.append(Init_Barrier(A=(20, 9), B=(21, 20)))
-
-
-# myMap = Map(L=Length, W=Width, E=Exit, B=Barrier)
-
-
-# # 出口
-# # 点集
-# Exit = Init_Exit(P1=(100, 28), P2=(100, 32))
-# Exit.extend(Init_Exit(P1=(0, 28), P2=(0, 32)))
-
-# # 障碍 矩形区域
-# Barrier = list()
-# Barrier.append(Init_Barrier(A=(24, 0), B=(26, 38)))
-# Barrier.append(Init_Barrier(A=(49, 20), B=(51, 60)))
-# Barrier.append(Init_Barrier(A=(74, 0), B=(76, 30)))
-
-
-# myMap =  Map(L=Length, W=Width, E=Exit, B=Barrier)
-
 # 厂区长宽
 Length = 100
 Width = 75
 
-# 出口 
+# 出口
 # 点集
 Exits = list()
 Exit = Init_Exit(P1=(100, 27), P2=(100, 29))
