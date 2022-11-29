@@ -58,8 +58,8 @@ def Init_Barrier1(A, B, C):
     if A[0] > B[0]:
         A, B = B, A
 
-    x1, y1 = int(A[0] / 3), 75 - int(A[1] / 3)
-    x2, y2 = int(B[0] / 3), 75 - int(B[1] / 3)
+    x1, y1 = int(A[0] /3), 75 - int(A[1] /3)
+    x2, y2 = int(B[0] /3), 75 - int(B[1] /3)
 
     if y1 < y2:
         return ((x1, y1), (x2, y2), C)
@@ -133,7 +133,7 @@ class Map:
         #
         # 显示全部
         # #print(self.space)
-
+        self.blankspace=self.space.copy()
         self.Init_Potential()
 
     # self.print(self.space)
@@ -195,42 +195,97 @@ class Map:
                     for j in range(self.Width + Outer_Size * 2):
                         minDis[i][j] = min(minDis[i][j], tmp[i][j])
 
-        self.space = minDis
+        # self.space = minDis
 
         seeit = minDis.copy()
-        # Barrier.append(Init_Barrier1(A=(65, 33), B=(85, 53), C=1))
-        print(seeit.shape)
+        for (A, B, C) in self.Barrier:
+            if C <= 2:
+                for i in range(A[0] - 1, B[0] + 2):
+                    for j in range(A[1] - 1, B[1] + 2):
+                        minDis[i][j] = float("inf")
+        self.space = minDis
         for (A, B, C) in self.Barrier:
             if C <= 2:
                 for i in range(A[0] - 1, B[0] + 2):
                     for j in range(A[1] - 1, B[1] + 2):
                         seeit[i][j] += 50
-        minDis = seeit.copy()
+
         for i in range(seeit.shape[0]):
             for j in range(seeit.shape[1]):
                 if seeit[i][j] == float("inf"):
                     seeit[i][j] = 200
-
+        # seeit[24][60]=0
+        # 查看热力地图
         sns.heatmap(seeit.T, cmap='Reds', vmax=seeit.max(), vmin=seeit.min())
         plt.axis('equal')
         plt.show()
 
-        self.space = minDis
-        # 查看热力地图
+
         # toprint=minDis.copy()
         # toprint=toprint.T
-        # for i in range(50,76):
-        #     for j in range(70,99):
+        # for i in range(0,70):
+        #     for j in range(90,102):
         #         if toprint[i][j]==float("inf"):
-        #             print(toprint[i][j],end="   ")
-        #         elif toprint[i][j]>=100:
+        #             print(toprint[i][j],end="  ")
+        #         elif toprint[i][j]>=10:
         #             print(round(toprint[i][j],1),end=" ")
         #         else:
         #             print(round(toprint[i][j],1),end="  ")
         #     print("")
 
-    # return minDis
-    # #print(minDis)
+    # 更新势能地图
+    def update_Potential(self):
+        self.space=self.blankspace.copy()
+        self.newB=list()
+        self.newB.append(Init_Barrier1(A=(85, 53), B=(95, 62), C=1))
+        # self.newB.append(Init_Barrier1(A=(60, 60), B=(90,90), C=1))
+        # self.newB.append(Init_Barrier1(A=(170, 200), B=(175, 235), C=1))
+        for (A,B,C) in self.newB:
+            for i in range(A[0], B[0] + 1):
+                for j in range(A[1], B[1] + 1):
+                    self.space[i][j] = float("inf")
+                    self.blankspace[i][j] = float("inf")
+                    self.barrier_list.append((i, j))
+        minDis = np.zeros((self.Length + Outer_Size * 2, self.Width + Outer_Size * 2))
+        for i in range(self.Length + Outer_Size * 2):
+            for j in range(self.Width + Outer_Size * 2):
+                minDis[i][j] = float("inf")
+
+        # #print(minDis)
+        for num in range(len(self.Exits)):
+            for (sx, sy) in Exits[num]:
+                # print(sx, sy)
+                tmp = self.BFS(sx, sy)
+                # self.#print(tmp)
+                # print("----")
+                for i in range(self.Length + Outer_Size * 2):
+                    for j in range(self.Width + Outer_Size * 2):
+                        minDis[i][j] = min(minDis[i][j], tmp[i][j])
+
+        for (A, B, C) in self.Barrier:
+            if C <= 2:
+                for i in range(A[0] - 1, B[0] + 2):
+                    for j in range(A[1] - 1, B[1] + 2):
+                        minDis[i][j] = float("inf")
+
+        self.space = minDis
+
+
+        # seeit = minDis.copy()
+        # # Barrier.append(Init_Barrier1(A=(65, 33), B=(85, 53), C=1))
+        # print(seeit.shape)
+        # for (A, B, C) in self.Barrier:
+        #     if C <= 2:
+        #         for i in range(A[0] - 1, B[0] + 2):
+        #             for j in range(A[1] - 1, B[1] + 2):
+        #                 seeit[i][j] += 50
+        # for i in range(seeit.shape[0]):
+        #     for j in range(seeit.shape[1]):
+        #         if seeit[i][j] == float("inf"):
+        #             seeit[i][j] = 200
+        # sns.heatmap(seeit.T, cmap='Reds', vmax=seeit.max(), vmin=seeit.min())
+        # plt.axis('equal')
+        # plt.show()
 
     def BFS(self, x, y):
         if not self.Check_Valid(x, y):
@@ -293,7 +348,6 @@ Width = 75
 # 出口
 # 点集
 Exits = list()
-Exit = Init_Exit(P1=(100, 27), P2=(100, 29))
 Exits.append(Init_Exit(P1=(100, 27), P2=(100, 29)))
 Exits.append(Init_Exit(P1=(75, 0), P2=(77, 0)))
 

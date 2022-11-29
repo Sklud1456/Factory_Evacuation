@@ -1,5 +1,9 @@
 import tkinter as tk
+import matplotlib
+from tkinter import *
+matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
+from PIL import Image,ImageTk
 import seaborn as sns
 import numpy as np
 import os
@@ -17,6 +21,7 @@ class GUI:
     Pic_Ratio = 10
     People = People(0, myMap)
 
+
     def __init__(self):
         self.root = tk.Tk()
         self.root.title("疏散模拟")
@@ -27,6 +32,9 @@ class GUI:
         height = myMap.Width * GUI.Pic_Ratio
         self.canvas = tk.Canvas(self.root, width=width, height=height, bg="grey")
         self.canvas.pack()
+
+        global image_file
+        image_file = tk.PhotoImage(file='2.gif')
 
         self.label_text = tk.Label(self.root, text="疏散人数:", font='Arial -37 bold')
         self.label_time = tk.Label(self.root, text="耗时 = 0.00s", font='Arial -37 bold')
@@ -74,7 +82,7 @@ class GUI:
         self.People.tot += 1
         self.entry_peoplenumber.delete(0, "end")
         self.entry_peoplenumber.insert(0, str(self.People.tot))
-        self.People.list.append(Person(self.People.tot, pos_x, pos_y))
+        self.People.list.append(Person(self.People.tot, pos_x, pos_y,"special"))
         self.People.addMapValue(self.People.rmap, pos_x, pos_y)
         self.People.addMapValue(self.People.thmap, pos_x, pos_y)
         self.Update_People(self.People.list)
@@ -82,6 +90,36 @@ class GUI:
     # 障碍
     def setBarrier(self):
         for (A, B, C) in myMap.Barrier:
+            x1, y1, x2, y2 = A[0], A[1], B[0], B[1]
+            [x1, y1, x2, y2] = map(lambda x: x * GUI.Pic_Ratio, [x1, y1, x2, y2])
+            str = ""
+            text = ""
+            if C == 1:
+                str = "#FF0000"  # 红色
+                text = "甲类"
+
+            elif C == 2:
+                str = "#B22222"  # 砖红色
+                text = "乙类"
+            elif C == 3:
+                str = "#FF8C00"  # 橙色
+                text = "丙类"
+            elif C == 4:
+                str = "#FFFF00"  # 黄色
+                text = "丁类"
+            elif C == 5:
+                str = "#0000FF"  # 蓝色
+                text = "戊类"
+
+            self.canvas.create_rectangle(x1, y1, x2, y2, fill=str, outline=str)
+            if C == 1:
+                self.canvas.create_image(int((x2-20)), int((y2-20) ), anchor='nw', image=image_file)
+            self.canvas.create_text(int((x1 + x2) / 2), int((y1 + y2) / 2), text=text, fill='#7CCD7C', anchor="center",
+                                    font=('微软雅黑', 15, 'bold'))
+
+    # 障碍
+    def updateBarrier(self):
+        for (A, B, C) in myMap.newB:
             x1, y1, x2, y2 = A[0], A[1], B[0], B[1]
             [x1, y1, x2, y2] = map(lambda x: x * GUI.Pic_Ratio, [x1, y1, x2, y2])
             str = ""
@@ -102,8 +140,9 @@ class GUI:
                 str = "#0000FF"  # 蓝色
                 text = "戊类"
             self.canvas.create_rectangle(x1, y1, x2, y2, fill=str, outline=str)
-            self.canvas.create_text(int((x1 + x2) / 2), int((y1 + y2) / 2), text=text, fill='#7CCD7C', anchor="center",
-                                    font=('微软雅黑', 15, 'bold'))
+            # self.canvas.create_text(int((x1 + x2) / 2), int((y1 + y2) / 2), text=text, fill='#7CCD7C', anchor="center",
+            #                         font=('微软雅黑', 15, 'bold'))
+
 
     # 出口
     def setExit(self):
@@ -119,6 +158,7 @@ class GUI:
         for p in People_List:
             # print(p.id)
             self.canvas.delete(p.name())
+            # print(p.pos[0],p.pos[1])
 
         self.Show_People(People_List)
 
@@ -130,7 +170,10 @@ class GUI:
             x1, y1 = ox - 0.2, oy - 0.2
             x2, y2 = ox + 0.2, oy + 0.2
             [x1, y1, x2, y2] = map(lambda x: x * GUI.Pic_Ratio, [x1, y1, x2, y2])
-            self.canvas.create_oval(x1, y1, x2, y2, fill="black", outline="black", tag=p.name())
+            if p.membertype=="special":
+                self.canvas.create_oval(x1, y1, x2, y2, fill="blue", outline="blue", tag=p.name())
+            else:
+                self.canvas.create_oval(x1, y1, x2, y2, fill="black", outline="black", tag=p.name())
 
     def Cellular_Automata(self, Total_People):
         # UI = GUI()
@@ -142,13 +185,28 @@ class GUI:
 
         Time_Start = time.time()
         Eva_Number = 0
+        cnt=1
         while Eva_Number < Total_People:
+            Time_Pass = time.time() - Time_Start
+            if (Time_Pass>=5 )and (cnt==1):
+                print("shengc")
+                myMap.update_Potential()
+                P.map=myMap
+                self.updateBarrier()
+                cnt=0
             Eva_Number = P.run()
 
             UI.Update_People(P.list)
+            if(cnt==0):
+                cnt=2
+                # time.sleep(0.2)
+            elif cnt==1:
+                time.sleep(0.35)
+            else:
+                time.sleep(0.35)
 
-            # time.sleep(random.uniform(0.05, 0.15))
-            time.sleep(0.01)
+            # time.sleep(random.uniform(0.15, 0.2))
+
             UI.canvas.update()
             UI.root.update()
 
