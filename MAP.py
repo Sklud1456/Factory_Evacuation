@@ -58,8 +58,8 @@ def Init_Barrier1(A, B, C):
     if A[0] > B[0]:
         A, B = B, A
 
-    x1, y1 = int(A[0] /3), 75 - int(A[1] /3)
-    x2, y2 = int(B[0] /3), 75 - int(B[1] /3)
+    x1, y1 = int(A[0] / 3), 75 - int(A[1] / 3)
+    x2, y2 = int(B[0] / 3), 75 - int(B[1] / 3)
 
     if y1 < y2:
         return ((x1, y1), (x2, y2), C)
@@ -133,7 +133,7 @@ class Map:
         #
         # 显示全部
         # #print(self.space)
-        self.blankspace=self.space.copy()
+        self.blankspace = self.space.copy()
         self.Init_Potential()
 
     # self.print(self.space)
@@ -220,7 +220,6 @@ class Map:
         plt.axis('equal')
         plt.show()
 
-
         # toprint=minDis.copy()
         # toprint=toprint.T
         # for i in range(0,70):
@@ -235,12 +234,12 @@ class Map:
 
     # 更新势能地图
     def update_Potential(self):
-        self.space=self.blankspace.copy()
-        self.newB=list()
+        self.space = self.blankspace.copy()
+        self.newB = list()
         self.newB.append(Init_Barrier1(A=(85, 53), B=(95, 62), C=1))
         # self.newB.append(Init_Barrier1(A=(60, 60), B=(90,90), C=1))
         # self.newB.append(Init_Barrier1(A=(170, 200), B=(175, 235), C=1))
-        for (A,B,C) in self.newB:
+        for (A, B, C) in self.newB:
             for i in range(A[0], B[0] + 1):
                 for j in range(A[1], B[1] + 1):
                     self.space[i][j] = float("inf")
@@ -269,7 +268,6 @@ class Map:
                         minDis[i][j] = float("inf")
 
         self.space = minDis
-
 
         # seeit = minDis.copy()
         # # Barrier.append(Init_Barrier1(A=(65, 33), B=(85, 53), C=1))
@@ -320,6 +318,14 @@ class Map:
             x = random.uniform(1, self.Length + 2)
             y = random.uniform(1, self.Width + 2)
 
+        return x, y
+
+    def Random_Valid_Point_S(self, xmin, xmax, ymin, ymax):
+        x = random.uniform(xmin, xmax)
+        y = random.uniform(ymin, ymax)
+        while not myMap.Check_Valid(x, y):
+            x = random.uniform(xmin, xmax)
+            y = random.uniform(ymin, ymax)
         return x, y
 
 

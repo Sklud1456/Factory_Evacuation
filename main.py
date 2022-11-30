@@ -1,9 +1,10 @@
 import tkinter as tk
 import matplotlib
 from tkinter import *
+
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
-from PIL import Image,ImageTk
+from PIL import Image, ImageTk
 import seaborn as sns
 import numpy as np
 import os
@@ -20,7 +21,6 @@ class GUI:
     # 图像比例
     Pic_Ratio = 10
     People = People(0, myMap)
-
 
     def __init__(self):
         self.root = tk.Tk()
@@ -82,7 +82,7 @@ class GUI:
         self.People.tot += 1
         self.entry_peoplenumber.delete(0, "end")
         self.entry_peoplenumber.insert(0, str(self.People.tot))
-        self.People.list.append(Person(self.People.tot, pos_x, pos_y,"special"))
+        self.People.list.append(Person(self.People.tot, pos_x, pos_y, "special"))
         self.People.addMapValue(self.People.rmap, pos_x, pos_y)
         self.People.addMapValue(self.People.thmap, pos_x, pos_y)
         self.Update_People(self.People.list)
@@ -113,7 +113,7 @@ class GUI:
 
             self.canvas.create_rectangle(x1, y1, x2, y2, fill=str, outline=str)
             if C == 1:
-                self.canvas.create_image(int((x2-20)), int((y2-20) ), anchor='nw', image=image_file)
+                self.canvas.create_image(int((x2 - 20)), int((y2 - 20)), anchor='nw', image=image_file)
             self.canvas.create_text(int((x1 + x2) / 2), int((y1 + y2) / 2), text=text, fill='#7CCD7C', anchor="center",
                                     font=('微软雅黑', 15, 'bold'))
 
@@ -143,7 +143,6 @@ class GUI:
             # self.canvas.create_text(int((x1 + x2) / 2), int((y1 + y2) / 2), text=text, fill='#7CCD7C', anchor="center",
             #                         font=('微软雅黑', 15, 'bold'))
 
-
     # 出口
     def setExit(self):
         print(myMap.Exits)
@@ -170,7 +169,7 @@ class GUI:
             x1, y1 = ox - 0.2, oy - 0.2
             x2, y2 = ox + 0.2, oy + 0.2
             [x1, y1, x2, y2] = map(lambda x: x * GUI.Pic_Ratio, [x1, y1, x2, y2])
-            if p.membertype=="special":
+            if p.membertype == "special":
                 self.canvas.create_oval(x1, y1, x2, y2, fill="blue", outline="blue", tag=p.name())
             else:
                 self.canvas.create_oval(x1, y1, x2, y2, fill="black", outline="black", tag=p.name())
@@ -185,25 +184,25 @@ class GUI:
 
         Time_Start = time.time()
         Eva_Number = 0
-        cnt=1
+        cnt = 1
         while Eva_Number < Total_People:
             Time_Pass = time.time() - Time_Start
-            if (Time_Pass>=5 )and (cnt==1):
+            if (Time_Pass >= 5) and (cnt == 1):
                 print("shengc")
                 myMap.update_Potential()
-                P.map=myMap
+                P.map = myMap
                 self.updateBarrier()
-                cnt=0
+                cnt = 0
             Eva_Number = P.run()
 
             UI.Update_People(P.list)
-            if(cnt==0):
-                cnt=2
+            if (cnt == 0):
+                cnt = 2
                 # time.sleep(0.2)
-            elif cnt==1:
-                time.sleep(0.35)
+            elif cnt == 1:
+                time.sleep(0.4)
             else:
-                time.sleep(0.35)
+                time.sleep(0.4)
 
             # time.sleep(random.uniform(0.15, 0.2))
 

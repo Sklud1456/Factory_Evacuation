@@ -10,7 +10,7 @@ import random
 class Person:
     Normal_Speed = 1.0
 
-    def __init__(self, id, pos_x, pos_y,tpye="normal"):
+    def __init__(self, id, pos_x, pos_y, tpye="normal"):
         self.id = id
         self.pos = (pos_x, pos_y)
         self.speed = Person.Normal_Speed
@@ -41,8 +41,15 @@ class People:
         # map 上总的经过人数
         # 热力图
         self.thmap = np.zeros(((myMap.Length + 2), (myMap.Width + 2)))
+
         for i in range(cnt):
-            pos_x, pos_y = myMap.Random_Valid_Point()
+            # pos_x, pos_y = myMap.Random_Valid_Point_S(78,95,7,26)行政
+            # pos_x, pos_y = myMap.Random_Valid_Point_S(43, 73, 7, 26)化验
+            # pos_x, pos_y = myMap.Random_Valid_Point_S(5, 38, 7, 26)仓库
+            # pos_x, pos_y = myMap.Random_Valid_Point_S(7, 32, 35, 68)储罐
+            # pos_x, pos_y = myMap.Random_Valid_Point_S(37, 70, 32, 69)车间
+            # pos_x, pos_y = myMap.Random_Valid_Point_S(73, 96, 30, 49)消防
+            pos_x, pos_y = myMap.Random_Valid_Point_S(75, 96, 53, 72)
             self.list.append(Person(i + 1, pos_x, pos_y))
             self.addMapValue(self.rmap, pos_x, pos_y)
             self.addMapValue(self.thmap, pos_x, pos_y)
@@ -136,10 +143,10 @@ class People:
             newendy = self.Width
         self.sacrescale = [(newstartx, newstarty), (newendx, newendy)]
         for p in self.list:
-            x=int(p.pos[0])
-            y=int(p.pos[1])
-            if self.sacremap[x][y]==1:
-                p.scared=True
+            x = int(p.pos[0])
+            y = int(p.pos[1])
+            if self.sacremap[x][y] == 1:
+                p.scared = True
 
         # sns.heatmap(self.sacremap.T, cmap='Reds', vmax=self.sacremap.max(), vmin=self.sacremap.min())
         # plt.axis('equal')
