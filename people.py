@@ -26,7 +26,7 @@ class Person:
 
 
 class People:
-    def __init__(self, cnt, myMap):
+    def __init__(self, cnt, myMap, tpye):
         self.list = []
         self.tot = cnt
         self.map = myMap
@@ -42,17 +42,62 @@ class People:
         # 热力图
         self.thmap = np.zeros(((myMap.Length + 2), (myMap.Width + 2)))
 
-        for i in range(cnt):
-            # pos_x, pos_y = myMap.Random_Valid_Point_S(78,95,7,26)行政
-            # pos_x, pos_y = myMap.Random_Valid_Point_S(43, 73, 7, 26)化验
-            # pos_x, pos_y = myMap.Random_Valid_Point_S(5, 38, 7, 26)仓库
-            # pos_x, pos_y = myMap.Random_Valid_Point_S(7, 32, 35, 68)储罐
-            # pos_x, pos_y = myMap.Random_Valid_Point_S(37, 70, 32, 69)车间
-            # pos_x, pos_y = myMap.Random_Valid_Point_S(73, 96, 30, 49)消防
-            pos_x, pos_y = myMap.Random_Valid_Point_S(75, 96, 53, 72)
-            self.list.append(Person(i + 1, pos_x, pos_y))
-            self.addMapValue(self.rmap, pos_x, pos_y)
-            self.addMapValue(self.thmap, pos_x, pos_y)
+        if tpye == 1:
+            for i in range(cnt):
+                pos_x, pos_y = myMap.Random_Valid_Point()
+                self.list.append(Person(i + 1, pos_x, pos_y))
+                self.addMapValue(self.rmap, pos_x, pos_y)
+                self.addMapValue(self.thmap, pos_x, pos_y)
+        else:
+            cnt1 = int(cnt * 0.2)#行政
+            cnt2 = int(cnt * 0.2)#化验
+            cnt3 = int(cnt * 0.05)#仓库
+            cnt4 = int(cnt * 0.15)#储罐
+            cnt5 = int(cnt * 0.25)#车间
+            cnt6 = int(cnt * 0.05)#消防
+            cnt7 = cnt - cnt1 - cnt2 - cnt3 - cnt4 - cnt5 - cnt6#机房
+            # 行政区域
+            for i in range(cnt1):
+                pos_x, pos_y = myMap.Random_Valid_Point_S(78, 96, 5, 27)
+                self.list.append(Person(i + 1, pos_x, pos_y))
+                self.addMapValue(self.rmap, pos_x, pos_y)
+                self.addMapValue(self.thmap, pos_x, pos_y)
+            # 化验区域
+            for i in range(cnt2):
+                pos_x, pos_y = myMap.Random_Valid_Point_S(45, 74, 5, 28)
+                self.list.append(Person(i + 1 + cnt1, pos_x, pos_y))
+                self.addMapValue(self.rmap, pos_x, pos_y)
+                self.addMapValue(self.thmap, pos_x, pos_y)
+            # 仓库区域
+            for i in range(cnt3):
+                pos_x, pos_y = myMap.Random_Valid_Point_S(2, 41, 4, 28)
+                self.list.append(Person(i + 1 + cnt1 + cnt2, pos_x, pos_y))
+                self.addMapValue(self.rmap, pos_x, pos_y)
+                self.addMapValue(self.thmap, pos_x, pos_y)
+            # 储罐区域
+            for i in range(cnt4):
+                pos_x, pos_y = myMap.Random_Valid_Point_S(5, 33, 33, 69)
+                self.list.append(Person(i + 1 + cnt1 + cnt2 + cnt3, pos_x, pos_y))
+                self.addMapValue(self.rmap, pos_x, pos_y)
+                self.addMapValue(self.thmap, pos_x, pos_y)
+            # 车间区域
+            for i in range(cnt5):
+                pos_x, pos_y = myMap.Random_Valid_Point_S(36, 70, 31, 70)
+                self.list.append(Person(i + 1 + cnt1 + cnt2 + cnt3 + cnt4, pos_x, pos_y))
+                self.addMapValue(self.rmap, pos_x, pos_y)
+                self.addMapValue(self.thmap, pos_x, pos_y)
+            # 消防区域
+            for i in range(cnt6):
+                pos_x, pos_y = myMap.Random_Valid_Point_S(72, 97, 30, 50)
+                self.list.append(Person(i + 1 + cnt1 + cnt2 + cnt3 + cnt4 + cnt5, pos_x, pos_y))
+                self.addMapValue(self.rmap, pos_x, pos_y)
+                self.addMapValue(self.thmap, pos_x, pos_y)
+            # 机房区域
+            for i in range(cnt7):
+                pos_x, pos_y = myMap.Random_Valid_Point_S(73, 97, 52, 72)
+                self.list.append(Person(i + 1 + cnt1 + cnt2 + cnt3 + cnt4 + cnt5 + cnt6, pos_x, pos_y))
+                self.addMapValue(self.rmap, pos_x, pos_y)
+                self.addMapValue(self.thmap, pos_x, pos_y)
 
     def setMapValue(self, mp, x, y, val=0):
         x, y = int(x), int(y)
@@ -84,9 +129,9 @@ class People:
         elif tot < 4:
             ratio = random.uniform(0.9, 1.1)
         elif tot < 7:
-            ratio = random.uniform(0.9, 1.0)
+            ratio = random.uniform(0.7, 1.0)
         else:
-            ratio = random.uniform(0.7, 0.9)
+            ratio = random.uniform(0.6, 0.7)
         return Person.Normal_Speed * ratio
 
     def getdensity(self, p):

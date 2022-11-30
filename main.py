@@ -20,7 +20,7 @@ class GUI:
     # GUI
     # 图像比例
     Pic_Ratio = 10
-    People = People(0, myMap)
+    People = People(0, myMap, 1)
 
     def __init__(self):
         self.root = tk.Tk()
@@ -48,13 +48,16 @@ class GUI:
                                           command=lambda: self.bind())
         self.button_unbindmouse = tk.Button(self.root, text="解绑鼠标", width=7, font='Arial -30 bold',
                                             command=lambda: self.unbind())
+        self.button_createpeople2 = tk.Button(self.root, text="比例生成", width=7, font='Arial -30 bold',
+                                              command=lambda: self.create_people2(int(self.entry_peoplenumber.get())))
 
         self.label_time.place(x=40, y=760)
         self.label_evac.place(x=40, y=810)
-        self.button_start.place(x=925, y=820)
+        self.button_start.place(x=925, y=830)
         self.button_createpeople.place(x=925, y=760)
-        self.button_bindmouse.place(x=500, y=830)
-        self.button_unbindmouse.place(x=650, y=830)
+        self.button_bindmouse.place(x=480, y=830)
+        self.button_unbindmouse.place(x=620, y=830)
+        self.button_createpeople2.place(x=770, y=830)
         self.label_text.place(x=580, y=770)
         self.entry_peoplenumber.place(x=760, y=770)
 
@@ -187,7 +190,8 @@ class GUI:
         cnt = 1
         while Eva_Number < Total_People:
             Time_Pass = time.time() - Time_Start
-            if (Time_Pass >= 5) and (cnt == 1):
+            temp = random.uniform(0, 1)
+            if (Time_Pass >= 5) and (cnt == 1) and temp > 0.5:
                 print("shengc")
                 myMap.update_Potential()
                 P.map = myMap
@@ -224,11 +228,12 @@ class GUI:
         plt.show()
 
     def create_people(self, Total_People):
-        self.People = People(Total_People, myMap)
+        self.People = People(Total_People, myMap, 1)
         UI.Update_People(self.People.list)
 
-
-# UI.root.mainloop()
+    def create_people2(self, Total_People):
+        self.People = People(Total_People, myMap, 2)
+        UI.Update_People(self.People.list)
 
 
 UI = GUI()

@@ -236,9 +236,32 @@ class Map:
     def update_Potential(self):
         self.space = self.blankspace.copy()
         self.newB = list()
-        self.newB.append(Init_Barrier1(A=(85, 53), B=(95, 62), C=1))
-        # self.newB.append(Init_Barrier1(A=(60, 60), B=(90,90), C=1))
-        # self.newB.append(Init_Barrier1(A=(170, 200), B=(175, 235), C=1))
+        temp = random.uniform(0, 1)
+        if temp < 0.125:
+            tempx = 75 + int(random.uniform(1, 15))
+            tempy = 43 + int(random.uniform(12, 14))
+        elif temp < 0.25:
+            tempx = 75 + int(random.uniform(13, 15))
+            tempy = 43 + int(random.uniform(1, 14))
+        elif temp < 0.375:
+            tempx = 75 - int(random.uniform(1, 15))
+            tempy = 43 - int(random.uniform(12, 14))
+        elif temp < 0.5:
+            tempx = 75 - int(random.uniform(13, 15))
+            tempy = 43 - int(random.uniform(1, 14))
+        elif temp < 0.625:
+            tempx = 75 + int(random.uniform(1, 15))
+            tempy = 43 - int(random.uniform(12, 14))
+        elif temp < 0.75:
+            tempx = 75 + int(random.uniform(13, 15))
+            tempy = 43 - int(random.uniform(1, 14))
+        elif temp < 0.875:
+            tempx = 75 - int(random.uniform(1, 15))
+            tempy = 43 + int(random.uniform(12, 14))
+        else:
+            tempx = 75 - int(random.uniform(13, 15))
+            tempy = 43 + int(random.uniform(1, 14))
+        self.newB.append(Init_Barrier1(A=(tempx - 5, tempy - 5), B=(tempx + 5, tempy + 4), C=1))
         for (A, B, C) in self.newB:
             for i in range(A[0], B[0] + 1):
                 for j in range(A[1], B[1] + 1):
