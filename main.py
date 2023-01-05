@@ -1,7 +1,8 @@
+#此代码在python环境下运行
+#需要安装的库在头文件已声明
 import tkinter as tk
 import matplotlib
 from tkinter import *
-
 matplotlib.use("TkAgg")
 import matplotlib.pyplot as plt
 from PIL import Image, ImageTk
@@ -260,8 +261,7 @@ class GUI:
         UI.label_evac['text'] = "已疏散: " + str(Eva_Number)
         UI.label_hurtanddead['text'] = "伤: " + str(Hurt_Number) + "  亡：" + str(Dead_Number)
 
-        # 清空扩散的障碍
-        self.canvas.delete("newb")
+
         # 绘制热力图
         heatmap = np.array(P.thmap)
         see = np.array(P.map.blankspace)
@@ -274,6 +274,9 @@ class GUI:
         sns.heatmap(heatmap.T, cmap='Reds')
         plt.axis('equal')
         plt.show()
+        # 清空扩散的障碍
+        myMap.clearNB()
+        self.canvas.delete("newb")
 
     # 正常生成
     def create_people(self, Total_People):

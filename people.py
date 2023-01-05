@@ -21,7 +21,7 @@ class Person:
             self.hurt = random.uniform(0, 1)
         else:
             self.hurt = 0
-        self.scared = True
+        self.scared = False
 
     def name(self):
         return "ID_" + str(self.id)
@@ -172,7 +172,7 @@ class People:
             ratio = random.uniform(0.6, 0.7)
         # 受伤之后也会降低速度
         if p.membertype == "hurt":
-            ratio -= 0.5 * p.hurt
+            ratio -= 0.3 * p.hurt
         return Person.Normal_Speed * ratio
 
     def getdensity(self, p):

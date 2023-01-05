@@ -135,6 +135,8 @@ class Map:
 
         # 通过保留space的副本来实现最后的地图显示
         self.blankspace = self.space.copy()
+        # origin副本用来保留最初的地图
+        self.origin=self.space.copy()
         self.Init_Potential()
 
     # self.print(self.space)
@@ -262,6 +264,11 @@ class Map:
         #         else:
         #             print(round(toprint[i][j],1),end="  ")
         #     print("")
+    #清楚新的障碍
+    def clearNB(self):
+        del self.newB
+        self.newB=list()
+        self.blankspace = self.origin.copy()
 
     # 更新势能地图
     def update_Potential(self):
@@ -308,9 +315,10 @@ class Map:
 
         for (A, B, C) in self.Barrier:
             if C == 0:
-                for i in range(A[0] - 1, B[0] + 2):
-                    for j in range(A[1] - 1, B[1] + 2):
+                for i in range(A[0] - 2, B[0] + 3):
+                    for j in range(A[1] - 2, B[1] + 3):
                         self.space[i][j] = float("inf")
+            # 提高建筑势能
             elif C <= 6:
                 for i in range(A[0] - 1, B[0] + 2):
                     for j in range(A[1] - 1, B[1] + 2):
