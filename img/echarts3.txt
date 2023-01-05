@@ -1,0 +1,46 @@
+option = {
+  title: {
+    text: '死伤人数图'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    data: ['死亡人数', '受伤人数']
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  toolbox: {
+    feature: {
+      saveAsImage: {}
+    }
+  },
+  xAxis: {
+    type: 'category',
+    name:'疏散人数',
+    boundaryGap: false,
+    data: ['50', '100', '200', '300', '400', '500', '600','800'],
+  },
+  yAxis: {
+    type: 'value',
+    name:'死伤人数'
+  },
+  series: [
+    {
+      name: '死亡人数',
+      type: 'line',
+      // stack: 'Total',
+      data: [0.2, 0.3, 0.4, 0.6, 0.5, 1.2, 1.5,2.8]
+    },
+    {
+      name: '受伤人数',
+      type: 'line',
+      // stack: 'Total',
+      data: [1.2, 2.6, 3.5, 5.8, 6.7, 9.2, 11.2,15.3]
+    },
+  ]
+};

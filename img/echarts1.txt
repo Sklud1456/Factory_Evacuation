@@ -1,0 +1,80 @@
+option = {
+  title: {
+    text: '建筑势能扩大与否对比图'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    data: ['建筑势能不扩大', '建筑势能扩大']
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  toolbox: {
+    feature: {
+      saveAsImage: {}
+    }
+  },
+  xAxis: {
+    type: 'value',
+    name:'时间',
+    boundaryGap: false,
+    
+  },
+  yAxis: {
+    data: ['50', '100', '200', '300', '400', '500', '600','800'],
+    name:'人数',
+    type: 'category',
+  },
+  series: [
+    
+    {
+      name: '建筑势能扩大',
+      type: 'line',
+      // stack: 'Total',
+      data: [49.04, 52.33, 55.16, 67.05, 69.78, 80.56, 97.45,121.89],
+
+    },
+    {
+      name: '建筑势能扩大',
+      type: 'bar',
+      // stack: 'Total',
+      data: [49.04, 52.33, 55.16, 67.05, 69.78, 80.56, 97.45,121.89],
+      itemStyle: {
+        normal: {
+        color: 'rgba(65,105,225, 0.2)',
+        }
+      }
+    },
+    {
+      name: '建筑势能不扩大',
+      type: 'line',
+      // stack: 'Total',
+      data: [41.3, 42.66, 46.97, 52.49, 64.7, 78.15, 93.23,117.26],
+      
+    },
+    {
+      name: '建筑势能不扩大',
+      type: 'bar',
+      // stack: 'Total',
+      data: [41.3, 42.66, 46.97, 52.49, 64.7, 78.15, 93.23,117.26],
+      itemStyle: {
+        normal: {
+        color: 'rgba(34,139,34, 0.2)',
+        }
+      }
+      // label:{
+      //   show:true,
+      //   position:'right',
+      //   textStyle:{
+      //     color:'#000',
+      //     fontSize:18
+      //   }
+      // }
+    },
+  ]
+};

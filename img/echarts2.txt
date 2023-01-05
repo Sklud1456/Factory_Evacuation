@@ -1,0 +1,80 @@
+option = {
+  title: {
+    text: '不同疏散模式的时间对比'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    data: ['同时疏散', '恐惧扩散疏散']
+  },
+  grid: {
+    left: '3%',
+    right: '4%',
+    bottom: '3%',
+    containLabel: true
+  },
+  toolbox: {
+    feature: {
+      saveAsImage: {}
+    }
+  },
+  xAxis: {
+    type: 'value',
+    name:'时间',
+    boundaryGap: false,
+    
+  },
+  yAxis: {
+    data: ['50', '100', '200', '300', '400', '500', '600','800'],
+    name:'人数',
+    type: 'category',
+  },
+  series: [
+    
+    {
+      name: '恐惧扩散疏散',
+      type: 'line',
+      // stack: 'Total',
+      data: [43.61, 49.16, 51.3, 63.96, 73.21, 84.3, 98.92,129.3],
+
+    },
+    {
+      name: '恐惧扩散疏散',
+      type: 'bar',
+      // stack: 'Total',
+      data: [43.61, 49.16, 51.3, 63.96, 73.21, 84.3, 98.92,129.3],
+      itemStyle: {
+        normal: {
+        color: 'rgba(65,105,225, 0.2)',
+        }
+      }
+    },
+    {
+      name: '同时疏散',
+      type: 'line',
+      // stack: 'Total',
+      data: [43.81, 42.36, 45.04, 53.28, 58.9, 76.82, 80.84,116.93],
+      
+    },
+    {
+      name: '同时疏散',
+      type: 'bar',
+      // stack: 'Total',
+      data: [43.81, 42.36, 45.04, 53.28, 58.9, 76.82, 80.84,116.93],
+      itemStyle: {
+        normal: {
+        color: 'rgba(34,139,34, 0.2)',
+        }
+      }
+      // label:{
+      //   show:true,
+      //   position:'right',
+      //   textStyle:{
+      //     color:'#000',
+      //     fontSize:18
+      //   }
+      // }
+    },
+  ]
+};
